@@ -21,9 +21,6 @@ void Main()
     
     while (System::Update())
     {
-        if (!manager.update())
-        {
-            break;
-        }
+        if (!manager.update()) break;
     }
 }
