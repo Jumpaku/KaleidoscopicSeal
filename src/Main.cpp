@@ -1,22 +1,37 @@
-﻿
-# include <Siv3D.hpp> // OpenSiv3D v0.2.4
+#include<Siv3D.hpp>
+#include<list>
+#include"jumpaku/kaleidoscopicseal/core/Kaleidoscope.hpp"
+#include"jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
+
+using namespace jumpaku::kaleidoscopicseal::core;
+
+
 
 void Main()
 {
-	Graphics::SetBackground(ColorF(0.8, 0.9, 1.0));
+    Graphics::SetFullScreen(false, { 1280, 720 });
+    Window::Centering();
+    
+    auto k = Kaleidoscope(Window::Center(), 10, 360);
+    auto builder = StrokeBuilder(k.originalTriangle.asPolygon(), 3.0);
 
-	const Font font(50);
-
-	const Texture textureCat(Emoji(U"🐈"), TextureDesc::Mipped);
-
-	while (System::Update())
-	{
-		font(U"Hello, Siv3D!🐣").drawAt(Window::Center(), Palette::Black);
-
-		font(Cursor::Pos()).draw(20, 400, ColorF(0.6));
-
-		textureCat.resized(80).draw(540, 380);
-
-		Circle(Cursor::Pos(), 60).draw(ColorF(1, 0, 0, 0.5));
-	}
+    while (System::Update())
+    {
+        k.originalTriangle.draw(Palette::Blue);
+        k.reflectedTriangles.each([](auto t){ t.draw(Palette::Aliceblue); });
+        if (MouseL.pressed()) {
+            builder.add(TimePoint { Time::GetNanosec()*1.0e-9, Cursor::Pos() });
+            auto s = builder.currentPatternStroke();
+            s.lines.each([](auto l){ l.draw(4, Palette::Orange); });
+            for(auto i : Range(1, k.division - 1)) {
+                auto m = k.reflection(i);
+                s.lines.each([m](auto l) {
+                    Line(m.transform(l.begin), m.transform(l.end)).draw(Palette::Orange);
+                });
+            }
+        }
+        else {
+            builder.reset();
+        }
+    }
 }
