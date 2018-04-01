@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Project
+bin/
+include/
+Info.plist
+KaleidoscopicSeal.xcodeproj
+lib/
+
+# macOS
+*.DS_Store
