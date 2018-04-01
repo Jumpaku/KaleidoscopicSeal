@@ -3,46 +3,11 @@
 #include "jumpaku/kaleidoscopicseal/core/Kaleidoscope.hpp"
 #include "jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
 #include "jumpaku/kaleidoscopicseal/scenes/Game.hpp"
+#include "jumpaku/kaleidoscopicseal/scenes/Title.hpp"
+#include "jumpaku/kaleidoscopicseal/scenes/Result.hpp"
 
 using namespace jumpaku::kaleidoscopicseal::core;
 using namespace jumpaku::kaleidoscopicseal::scenes;
-
-struct Title : MyApp::Scene
-{
-    Title(const InitData& init): IScene(init){}
-    
-    void update() override
-    {
-        if (MouseL.down())
-        {
-            changeScene(U"Game", 2s);
-        }
-    }
-    
-    void draw() const override
-    {
-        getData().font(U"Title").drawAt(Window::Center());
-    }
-};
-
-struct Result : MyApp::Scene
-{
-    Result(const InitData& init): IScene(init){}
-    
-    void update() override
-    {
-        if (MouseL.down())
-        {
-            changeScene(U"Title", 2000);
-        }
-    }
-    
-    void draw() const override
-    {
-        getData().font(U"Title").drawAt(Window::Center());
-    }
-};
-
 
 void Main()
 {
