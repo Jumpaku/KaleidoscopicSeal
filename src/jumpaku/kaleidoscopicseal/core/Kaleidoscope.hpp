@@ -14,6 +14,7 @@
 #endif /* Kaleidoscope_hpp */
 
 namespace jumpaku::kaleidoscopicseal::core {
+    
     struct Kaleidoscope
     {
         Kaleidoscope(Vec2 center, int division, double radius);

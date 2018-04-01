@@ -5,6 +5,8 @@
 
 using namespace jumpaku::kaleidoscopicseal::core;
 
+
+
 void Main()
 {
     Graphics::SetFullScreen(false, { 1280, 720 });
