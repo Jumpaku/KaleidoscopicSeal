@@ -16,9 +16,11 @@ StrokeBuilder::StrokeBuilder(Polygon area, double interval)
 void StrokeBuilder::reset()
 {
     points.clear();
+    state = StrokeState::Ready;
 }
 
-StrokeState StrokeBuilder::currentState()const {
+StrokeState StrokeBuilder::currentState()const
+{
     return state;
 }
 
@@ -31,14 +33,24 @@ Stroke StrokeBuilder::currentPatternStroke()const
     return Stroke(lines);
 }
 
-void StrokeBuilder::add(TimePoint timePoint)
+void StrokeBuilder::update(TimePoint timePoint)
 {
-    if(points.size() == 0)
-        state = StrokeState::Stroke;
-    
-    if(points.size() > 0 && timePoint.time - points[0].time > interval)
-        state = StrokeState::Timeout;
-    
-    if(state == StrokeState::Stroke && area.intersects(timePoint.point))
-        points.push_back(timePoint);
+    switch (state) {
+    case StrokeState::Ready:
+        if(area.intersects(timePoint.point)) {
+            state = StrokeState::Stroke;
+            points.push_back(timePoint);
+        }
+        break;
+    case StrokeState::Stroke:
+        if(area.intersects(timePoint.point)){
+            points.push_back(timePoint);
+        }
+        if(timePoint.time - points[0].time > interval){
+            state = StrokeState::Timeout;
+        }
+        break;
+    default:
+        break;
+    }
 }

@@ -11,10 +11,8 @@
 #include <stdio.h>
 #include <Siv3D.hpp>
 
-#endif /* Kaleidoscope_hpp */
-
-namespace jumpaku::kaleidoscopicseal::core {
-    
+namespace jumpaku::kaleidoscopicseal::core
+{
     struct Kaleidoscope
     {
         Kaleidoscope(Vec2 center, int division, double radius);
@@ -34,3 +32,5 @@ namespace jumpaku::kaleidoscopicseal::core {
         Mat3x2 reflection(int rectangleIndex) const;
     };
 }
+
+#endif /* Kaleidoscope_hpp */

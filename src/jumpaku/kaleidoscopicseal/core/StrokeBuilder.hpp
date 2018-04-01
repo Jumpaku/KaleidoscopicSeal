@@ -12,10 +12,8 @@
 #include <Siv3D.hpp>
 #include "Stroke.hpp"
 
-#endif /* StrokeBuilder_hpp */
-
-namespace jumpaku::kaleidoscopicseal::core {
-
+namespace jumpaku::kaleidoscopicseal::core
+{
     struct TimePoint
     {
         double const time;
@@ -45,6 +43,8 @@ namespace jumpaku::kaleidoscopicseal::core {
         
         Stroke currentPatternStroke()const;
         
-        void add(TimePoint timePoint);
+        void update(TimePoint timePoint);
     };
 }
+
+#endif /* StrokeBuilder_hpp */

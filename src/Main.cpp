@@ -1,10 +1,47 @@
-#include<Siv3D.hpp>
-#include<list>
-#include"jumpaku/kaleidoscopicseal/core/Kaleidoscope.hpp"
-#include"jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
+#include <Siv3D.hpp>
+#include <HamFramework.hpp>
+#include "jumpaku/kaleidoscopicseal/core/Kaleidoscope.hpp"
+#include "jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
+#include "jumpaku/kaleidoscopicseal/scenes/Game.hpp"
 
 using namespace jumpaku::kaleidoscopicseal::core;
+using namespace jumpaku::kaleidoscopicseal::scenes;
 
+struct Title : MyApp::Scene
+{
+    Title(const InitData& init): IScene(init){}
+    
+    void update() override
+    {
+        if (MouseL.down())
+        {
+            changeScene(U"Game", 2s);
+        }
+    }
+    
+    void draw() const override
+    {
+        getData().font(U"Title").drawAt(Window::Center());
+    }
+};
+
+struct Result : MyApp::Scene
+{
+    Result(const InitData& init): IScene(init){}
+    
+    void update() override
+    {
+        if (MouseL.down())
+        {
+            changeScene(U"Title", 2000);
+        }
+    }
+    
+    void draw() const override
+    {
+        getData().font(U"Title").drawAt(Window::Center());
+    }
+};
 
 
 void Main()
@@ -12,26 +49,16 @@ void Main()
     Graphics::SetFullScreen(false, { 1280, 720 });
     Window::Centering();
     
-    auto k = Kaleidoscope(Window::Center(), 10, 360);
-    auto builder = StrokeBuilder(k.originalTriangle.asPolygon(), 3.0);
-
+    const auto p = MakeShared<GameData>();
+    
+    MyApp manager;
+    manager.add<Title>(U"Title").add<Game>(U"Game").add<Result>(U"Result");
+    
     while (System::Update())
     {
-        k.originalTriangle.draw(Palette::Blue);
-        k.reflectedTriangles.each([](auto t){ t.draw(Palette::Aliceblue); });
-        if (MouseL.pressed()) {
-            builder.add(TimePoint { Time::GetNanosec()*1.0e-9, Cursor::Pos() });
-            auto s = builder.currentPatternStroke();
-            s.lines.each([](auto l){ l.draw(4, Palette::Orange); });
-            for(auto i : Range(1, k.division - 1)) {
-                auto m = k.reflection(i);
-                s.lines.each([m](auto l) {
-                    Line(m.transform(l.begin), m.transform(l.end)).draw(Palette::Orange);
-                });
-            }
-        }
-        else {
-            builder.reset();
+        if (!manager.update())
+        {
+            break;
         }
     }
 }
