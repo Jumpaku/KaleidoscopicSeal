@@ -1,22 +1,43 @@
-﻿
-# include <Siv3D.hpp> // OpenSiv3D v0.2.4
+# include <Siv3D.hpp>
+
+
 
 void Main()
 {
-	Graphics::SetBackground(ColorF(0.8, 0.9, 1.0));
+    Graphics::SetFullScreen(false, { 1280, 720 });
+    Window::Centering();
+    Image image(Window::Size(), Palette::White);
+    
+    auto center = Window::Center();
+    auto division = 6;
+    auto theta = 2.0*Math::Pi/division;
+    auto radius = 360.0;
+    auto baseTriangle = Triangle(center, center + radius*Vec2(Cos(theta), Sin(theta)), center + radius*Vec2(Cos(2*theta), Sin(2*theta)));
+    
+    Array<Vec2> points;
 
-	const Font font(50);
-
-	const Texture textureCat(Emoji(U"🐈"), TextureDesc::Mipped);
-
-	while (System::Update())
-	{
-		font(U"Hello, Siv3D!🐣").drawAt(Window::Center(), Palette::Black);
-
-		font(Cursor::Pos()).draw(20, 400, ColorF(0.6));
-
-		textureCat.resized(80).draw(540, 380);
-
-		Circle(Cursor::Pos(), 60).draw(ColorF(1, 0, 0, 0.5));
-	}
+    while (System::Update())
+    {
+        if (MouseL.pressed()) {
+            points.push_back(Cursor::Pos());
+        }
+        else {
+            points.clear();
+        }
+        
+        baseTriangle.draw(Palette::Blue);
+        LineString(points).draw(4, Palette::Orange);
+        for(auto i : Range(1, 5)){
+            baseTriangle.rotatedAt(center, i*theta).draw(Palette::Aqua);
+            LineString(points.map([=](auto p) {
+                if(IsOdd(i)){
+                    auto v = (p - center).rotated(2*i*theta);
+                    return Vec2(v.x, -v.y) + center;
+                }
+                else {
+                    return (p - center).rotated(i*theta) + center;
+                }
+            })).draw(2, Palette::Beige);
+        }
+    }
 }
