@@ -16,6 +16,7 @@ StrokeBuilder::StrokeBuilder(Polygon area, double interval)
 void StrokeBuilder::reset()
 {
     points.clear();
+    state = StrokeState::Ready;
 }
 
 StrokeState StrokeBuilder::currentState()const {
