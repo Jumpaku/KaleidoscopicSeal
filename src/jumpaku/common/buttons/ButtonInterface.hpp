@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 
-namespace jumpaku::buttons
+namespace jumpaku::commons::buttons
 {
     struct ButtonInterface
     {

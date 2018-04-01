@@ -8,7 +8,7 @@
 #ifndef ButtonView_hpp
 #define ButtonView_hpp
 
-namespace jumpaku::buttons
+namespace jumpaku::commons::buttons
 {
     struct ButtonView
     {

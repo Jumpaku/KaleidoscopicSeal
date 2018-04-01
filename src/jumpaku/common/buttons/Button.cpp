@@ -7,7 +7,7 @@
 
 #include "Button.hpp"
 
-using namespace jumpaku::buttons;
+using namespace jumpaku::commons::buttons;
 
 void Button::setState(State state)
 {

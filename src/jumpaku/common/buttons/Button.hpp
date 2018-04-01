@@ -13,7 +13,7 @@
 #include "ButtonInterface.hpp"
 #include "ButtonView.hpp"
 
-namespace jumpaku::buttons
+namespace jumpaku::commons::buttons
 {
     class ButtonBuilder;
     
