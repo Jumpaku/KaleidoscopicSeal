@@ -1,6 +1,7 @@
-# include <Siv3D.hpp>
-
+#include<Siv3D.hpp>
+#include<list>
 #include"jumpaku/kaleidoscopicseal/core/Kaleidoscope.hpp"
+#include"jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
 
 using namespace jumpaku::kaleidoscopicseal::core;
 
@@ -8,27 +9,27 @@ void Main()
 {
     Graphics::SetFullScreen(false, { 1280, 720 });
     Window::Centering();
-    Image image(Window::Size(), Palette::White);
     
-    auto center = Window::Center();
-    auto division = 8;
-    auto radius = 360.0;
-    
-    Array<Vec2> points;
-    auto k = Kaleidoscope(center, division, radius);
+    auto k = Kaleidoscope(Window::Center(), 10, 360);
+    auto builder = StrokeBuilder(k.originalTriangle.asPolygon(), 3.0);
 
     while (System::Update())
     {
-        if (MouseL.pressed()) {
-            points.push_back(Cursor::Pos());
-        }
-        else {
-            points.clear();
-        }
         k.originalTriangle.draw(Palette::Blue);
         k.reflectedTriangles.each([](auto t){ t.draw(Palette::Aliceblue); });
-        
-        LineString(points).draw(4, Palette::Orange);
-        k.reflect(points).each([](auto ps){ LineString(ps).draw(Palette::Orange); });
+        if (MouseL.pressed()) {
+            builder.add(TimePoint { Time::GetNanosec()*1.0e-9, Cursor::Pos() });
+            auto s = builder.currentPatternStroke();
+            s.lines.each([](auto l){ l.draw(4, Palette::Orange); });
+            for(auto i : Range(1, k.division - 1)) {
+                auto m = k.reflection(i);
+                s.lines.each([m](auto l) {
+                    Line(m.transform(l.begin), m.transform(l.end)).draw(Palette::Orange);
+                });
+            }
+        }
+        else {
+            builder.reset();
+        }
     }
 }

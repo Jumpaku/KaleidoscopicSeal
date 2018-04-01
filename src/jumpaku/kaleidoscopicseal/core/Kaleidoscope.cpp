@@ -32,12 +32,19 @@ Array<Triangle> Kaleidoscope::reflectTriangles(Vec2 center, int division, Triang
     }).asArray();
 }
 
-Array<Array<Vec2>> Kaleidoscope::reflect(Array<Vec2> const &points) const
+Mat3x2 Kaleidoscope::reflection(int rectangleIndex) const
 {
-    return Range(1, division-1).map([points, this](int i){
-        return points.map([i, this](auto p) {
-            auto v = (p - center).rotated(i*2.0*Math::Pi/division);
-            return (IsOdd(i) ? Vec2(v.x, -v.y) : v) + center;
-        });
-    }).asArray();
+    if(IsOdd(rectangleIndex)){
+        return Mat3x2::Identity()
+        .translated(-center)
+        .rotated(rectangleIndex*2.0*Math::Pi/division)
+        .scaled(-1, 1)
+        .translated(center);
+    }
+    else {
+        return Mat3x2::Identity()
+        .translated(-center)
+        .rotated(rectangleIndex*2.0*Math::Pi/division)
+        .translated(center);
+    }
 }

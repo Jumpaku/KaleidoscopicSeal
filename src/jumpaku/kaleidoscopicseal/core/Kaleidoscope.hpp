@@ -13,9 +13,7 @@
 
 #endif /* Kaleidoscope_hpp */
 
-namespace jumpaku {
-namespace kaleidoscopicseal {
-namespace core {
+namespace jumpaku::kaleidoscopicseal::core {
     struct Kaleidoscope
     {
         Kaleidoscope(Vec2 center, int division, double radius);
@@ -32,8 +30,6 @@ namespace core {
         
         Array<Triangle> const reflectedTriangles;
         
-        Array<Array<Vec2>> reflect(Array<Vec2> const &points) const;
+        Mat3x2 reflection(int rectangleIndex) const;
     };
-}
-}
 }
