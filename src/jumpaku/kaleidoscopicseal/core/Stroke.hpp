@@ -11,11 +11,8 @@
 #include <stdio.h>
 #include <Siv3D.hpp>
 
-#endif /* Stroke_hpp */
-
-
-
-namespace jumpaku::kaleidoscopicseal::core {
+namespace jumpaku::kaleidoscopicseal::core
+{
     
     struct Stroke
     {
@@ -23,3 +20,5 @@ namespace jumpaku::kaleidoscopicseal::core {
         Array<Line> const lines;
     };
 }
+
+#endif /* Stroke_hpp */
