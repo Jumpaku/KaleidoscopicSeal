@@ -20,6 +20,9 @@ void Game::update()
     if (MouseL.pressed()) {
         strokeBuilder.update(TimePoint { Time::GetNanosec()*1.0e-9, Cursor::Pos() });
     }
+    else if(strokeBuilder.currentState() == StrokeState::Timeout) {
+            changeScene(U"Result", 2s);
+    }
     else {
         strokeBuilder.reset();
     }
