@@ -13,7 +13,6 @@
 
 namespace jumpaku::kaleidoscopicseal::core
 {
-    
     struct Stroke
     {
         Stroke(Array<Line> const &lines): lines(lines){}

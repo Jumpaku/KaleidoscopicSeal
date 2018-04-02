@@ -26,6 +26,7 @@ StrokeState StrokeBuilder::currentState()const
 
 Stroke StrokeBuilder::currentPatternStroke()const
 {
+    if(points.size() == 1) return Stroke(Array<Line> { Line(points[0].point, points[0].point) });
     auto lines = Array<Line>();
     for(auto i : Range(1, points.size() - 1)){
         lines.push_back(Line(points[i - 1].point, points[i].point));

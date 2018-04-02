@@ -12,8 +12,9 @@ using namespace jumpaku::kaleidoscopicseal::scenes;
 
 Game::Game(const InitData& init)
     : IScene(init),
-    kaleidoscope(Kaleidoscope(Window::Center(), 10, 360)),
-    strokeBuilder(StrokeBuilder(kaleidoscope.originalTriangle.asPolygon(), 3.0)){}
+    kaleidoscope(Kaleidoscope(Window::Center(), 6, 360)),
+    strokeBuilder(StrokeBuilder(kaleidoscope.originalTriangle.asPolygon(), 3.0)),
+    targets(Array<Vec2>(5, Arg::generator=[](){ return RandomVec2(Circle(Window::Center(), 360*Cos(Math::Pi/6))); })){}
 
 void Game::update()
 {
@@ -21,7 +22,7 @@ void Game::update()
         strokeBuilder.update(TimePoint { Time::GetNanosec()*1.0e-9, Cursor::Pos() });
     }
     else if(strokeBuilder.currentState() == StrokeState::Timeout) {
-            changeScene(U"Result", 2s);
+        changeScene(U"Result", 2s);
     }
     else {
         strokeBuilder.reset();
@@ -32,14 +33,22 @@ void Game::draw() const
 {
     kaleidoscope.originalTriangle.draw(Palette::Blue);
     kaleidoscope.reflectedTriangles.each([](auto t){ t.draw(Palette::Aliceblue); });
-    if(strokeBuilder.currentState() == StrokeState::Ready) return;
-    
-    auto s = strokeBuilder.currentPatternStroke();
-    s.lines.each([](auto l){ l.draw(4, Palette::Orange); });
-    for(auto i : Range(1, kaleidoscope.division - 1)) {
-        auto m = kaleidoscope.reflection(i);
-        s.lines.each([m](auto l) {
-            Line(m.transform(l.begin), m.transform(l.end)).draw(Palette::Orange);
-        });
+
+    if(strokeBuilder.currentState() == StrokeState::Ready) {
+        targets.each([](auto t){ Circle(t, 10).draw(Palette::Green); });
+    }
+    else{
+        auto s = strokeBuilder.currentPatternStroke();
+        auto lines = s.lines;
+        for(auto i : Range(1, kaleidoscope.division - 1)) {
+            auto m = kaleidoscope.reflection(i);
+            s.lines.each([&lines, m](auto l) {
+                lines.push_back(Line(m.transform(l.begin), m.transform(l.end)));
+            });
+        }
+        auto hits = TestHits(lines, targets.map([](auto t){ return Circle(t, 10); }));
+        hits.each([](auto hit){ hit.target.draw(hit.isHit ? Palette::Red : Palette::Green); });
+
+        lines.each([](auto l){ l.draw(Palette::Orange); });
     }
 }
