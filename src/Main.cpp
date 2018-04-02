@@ -4,6 +4,7 @@
 #include "jumpaku/kaleidoscopicseal/core/StrokeBuilder.hpp"
 #include "jumpaku/kaleidoscopicseal/scenes/Game.hpp"
 #include "jumpaku/kaleidoscopicseal/scenes/Title.hpp"
+#include "jumpaku/kaleidoscopicseal/scenes/Story.hpp"
 #include "jumpaku/kaleidoscopicseal/scenes/Result.hpp"
 
 using namespace jumpaku::kaleidoscopicseal::core;
@@ -17,10 +18,11 @@ void Main()
     const auto p = MakeShared<GameData>();
     
     MyApp manager;
-    manager.add<Title>(U"Title").add<Game>(U"Game").add<Result>(U"Result");
+    manager.add<Title>(U"Title").add<Story>(U"Story").add<Game>(U"Game").add<Result>(U"Result");
     
     while (System::Update())
     {
         if (!manager.update()) break;
     }
 }
+

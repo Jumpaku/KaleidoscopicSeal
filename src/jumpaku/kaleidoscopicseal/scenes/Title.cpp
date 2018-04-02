@@ -15,7 +15,7 @@ void Title::update()
 {
     if (MouseL.down())
     {
-        changeScene(U"Game", 2s);
+        changeScene(U"Story", 2s);
     }
 }
 

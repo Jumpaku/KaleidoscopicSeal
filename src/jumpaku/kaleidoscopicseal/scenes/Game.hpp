@@ -24,7 +24,7 @@ namespace jumpaku::kaleidoscopicseal::scenes
         
         jumpaku::kaleidoscopicseal::core::StrokeBuilder strokeBuilder;
         
-        Array<Vec2> targets;
+        Array<Circle> targets;
         
         Game(const InitData& init);
         

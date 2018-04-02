@@ -10,11 +10,13 @@
 using namespace jumpaku::kaleidoscopicseal::core;
 using namespace jumpaku::kaleidoscopicseal::scenes;
 
+
+
 Game::Game(const InitData& init)
     : IScene(init),
     kaleidoscope(Kaleidoscope(Window::Center(), 6, 360)),
     strokeBuilder(StrokeBuilder(kaleidoscope.originalTriangle.asPolygon(), 3.0)),
-    targets(Array<Vec2>(5, Arg::generator=[](){ return RandomVec2(Circle(Window::Center(), 360*Cos(Math::Pi/6))); })){}
+    targets(Array<Circle>(5, Arg::generator=[](){ return Circle(RandomVec2(Circle(Window::Center(), 360*Cos(Math::Pi/6))), 10); })){}
 
 void Game::update()
 {
@@ -35,7 +37,7 @@ void Game::draw() const
     kaleidoscope.reflectedTriangles.each([](auto t){ t.draw(Palette::Aliceblue); });
 
     if(strokeBuilder.currentState() == StrokeState::Ready) {
-        targets.each([](auto t){ Circle(t, 10).draw(Palette::Green); });
+        targets.each([](auto t){ t.draw(Palette::Green); });
     }
     else{
         auto s = strokeBuilder.currentPatternStroke();
@@ -46,7 +48,7 @@ void Game::draw() const
                 lines.push_back(Line(m.transform(l.begin), m.transform(l.end)));
             });
         }
-        auto hits = TestHits(lines, targets.map([](auto t){ return Circle(t, 10); }));
+        auto hits = TestHits(lines, targets);
         hits.each([](auto hit){ hit.target.draw(hit.isHit ? Palette::Red : Palette::Green); });
 
         lines.each([](auto l){ l.draw(Palette::Orange); });
