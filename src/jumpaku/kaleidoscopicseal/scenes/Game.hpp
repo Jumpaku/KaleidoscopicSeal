@@ -14,6 +14,7 @@
 #include "Scenes.hpp"
 #include "../core/Kaleidoscope.hpp"
 #include "../core/StrokeBuilder.hpp"
+#include "../core/TestHits.hpp"
 
 namespace jumpaku::kaleidoscopicseal::scenes
 {
@@ -22,6 +23,8 @@ namespace jumpaku::kaleidoscopicseal::scenes
         jumpaku::kaleidoscopicseal::core::Kaleidoscope kaleidoscope;
         
         jumpaku::kaleidoscopicseal::core::StrokeBuilder strokeBuilder;
+        
+        Array<Vec2> targets;
         
         Game(const InitData& init);
         

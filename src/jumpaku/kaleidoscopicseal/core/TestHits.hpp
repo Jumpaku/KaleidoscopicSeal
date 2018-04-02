@@ -15,11 +15,11 @@ namespace jumpaku::kaleidoscopicseal::core
 {
     struct HitResult
     {
-        Polygon const target;
+        Circle const target;
         bool const isHit;
     };
     
-    Array<HitResult> TestHit(Array<Stroke> stroke, Array<Polygon> targets);
+    Array<HitResult> TestHits(Array<Line> lines, Array<Circle> targets);
 }
 
 #endif /* CollsionDetector_hpp */
